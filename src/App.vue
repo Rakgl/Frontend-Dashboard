@@ -10,7 +10,6 @@ const theme = useTheme();
 const drawer = ref(true);
 const isFullScreen = ref(false);
 
-// Full screen function
 const toggleFullScreen = async () => {
     try {
         if (!document.fullscreenElement) {
@@ -25,14 +24,12 @@ const toggleFullScreen = async () => {
     }
 }
 
-// Dark mode toggle and system preference
 const toggleTheme = () => {
     const newTheme = theme.global.name.value === 'light' ? 'dark' : 'light';
     theme.global.name.value = newTheme;
     localStorage.setItem('theme', newTheme);
 };
 
-// Sync with system preference
 const initTheme = () => {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -78,7 +75,6 @@ const logout = () => {
     router.push('/admin/login');
 };
 
-// Navigation helper functions
 interface MenuItem {
     title: string;
     icon: string;
@@ -116,7 +112,6 @@ onMounted(() => {
 
 <template>
     <v-app>
-        <!-- Sidebar -->
         <div class="container-left">
             <v-navigation-drawer class="side-left" v-model="drawer" app clipped>
                 <v-list>
@@ -135,9 +130,45 @@ onMounted(() => {
             </v-navigation-drawer>
         </div>
 
-        <!-- App Bar -->
         <v-app-bar app>
-            <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <svg @click="drawer = !drawer" viewBox="0 0 100 100">
+                <path fill="none" stroke="#fff" stroke-width="10" d="M 20 20 C 24 20 36 20 50 20 C 64 20 76 20 80 20">
+                    <animate attributeName="d"
+                        values="M 20 20 C 24 20 36 20 50 20 C 64 20 76 20 80 20; M 20 20 C 37 37 37 37 50 50 C 63 37 63 37 80 20"
+                        dur=".5s" begin="menuBtn.click" repeatCount="0" fill="freeze" />
+                    <animate attributeName="d"
+                        values="M 20 20 C 37 37 37 37 50 50 C 63 37 63 37 80 20; M 20 20 C 24 20 36 20 50 20 C 64 20 76 20 80 20"
+                        dur=".5s" repeatCount="none" begin="backToMenu.click" fill="freeze" />
+                </path>
+                <path stroke="#fff" stroke-width="10" d="M20 50h30h30">
+                    <animate attributeName="d" values="M 20 50 h 30 h 30; M 50 50 h 0 h 0" dur=".5s"
+                        begin="menuBtn.click" repeatCount="0" fill="freeze" />
+                    <animate attributeName="d" values="M 50 50 h 0 h 0; M 20 50 h 30 h 30" dur=".5s" repeatCount="none"
+                        begin="backToMenu.click" fill="freeze" />
+                </path>
+                <path fill="none" stroke="#fff" stroke-width="10" d="M 20 80 C 24 80 36 80 50 80 C 64 80 76 80 80 80">
+                    <animate attributeName="d"
+                        values="M 20 80 C 24 80 36 80 50 80 C 64 80 76 80 80 80; M 20 80 C 37 63 37 63 50 50 C 63 63 63 63 80 80"
+                        dur=".5s" begin="menuBtn.click" repeatCount="0" fill="freeze" />
+                    <animate attributeName="d"
+                        values="M 20 80 C 37 63 37 63 50 50 C 63 63 63 63 80 80; M 20 80 C 24 80 36 80 50 80 C 64 80 76 80 80 80"
+                        dur=".5s" repeatCount="none" begin="backToMenu.click" fill="freeze" />
+                </path>
+
+                <path id="backToMenu" d="M 0 0 h100v100h-100z" fill="rgba(0,0,0,0)" stroke="none">
+                    <animate attributeName="d" values="M 0 0 h0v0h0z; M 0 0 h100v100h-100z" dur="1ms" repeatCount="none"
+                        begin="menuBtn.click" fill="freeze" />
+                    <animate attributeName="d" values="M 0 0 h100v100h-100z; M 0 0 h0v0h0z" dur="1ms" repeatCount="none"
+                        begin="backToMenu.click" fill="freeze" />
+                </path>
+
+                <path id="menuBtn" d="M 50 0 A 1 1 0 0 0 50 100 A 1 1 0 0 0 50 0" fill="rgba(0,0,0,0)">
+                    <animate attributeName="d" values="M 0 0 h100v100h-100z; M 0 0 h0v0h0z" dur="1ms" repeatCount="none"
+                        begin="menuBtn.click" fill="freeze" />
+                    <animate attributeName="d" values="M 0 0 h0v0h0z; M 0 0 h100v100h-100z" dur="1ms" repeatCount="none"
+                        begin="backToMenu.click" fill="freeze" />
+                </path>
+            </svg>
             <i class="fa-solid fa-magnifying-glass"></i>
             <v-spacer></v-spacer>
             <v-btn icon class="ml-1" @click="toggleFullScreen">
@@ -145,7 +176,7 @@ onMounted(() => {
             </v-btn>
             <v-btn icon @click="toggleTheme" class="theme-toggle-btn primary" text="Toggle Theme">
                 <v-icon>{{ theme.global.name.value === 'dark' ? 'mdi-white-balance-sunny' : 'mdi-moon-waxing-crescent'
-                    }}</v-icon>
+                }}</v-icon>
             </v-btn>
             <v-btn icon class="ml-1">
                 <v-icon>mdi-bell</v-icon>
@@ -161,6 +192,18 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+svg {
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    transform: translate(-50%, -50%);
+    border: 4px solid rgba(255, 255, 255, 0.5);
+    height: 100px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+}
+
 :deep(.v-application__wrap) {
     width: 210px;
 }
@@ -175,7 +218,6 @@ onMounted(() => {
     }
 }
 
-/* Smooth transitions for theme changes */
 .v-app,
 .sidebar,
 .v-main,
@@ -183,7 +225,6 @@ onMounted(() => {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Button animation */
 .theme-toggle-btn {
     transition: transform 0.2s ease;
 }
@@ -196,7 +237,6 @@ onMounted(() => {
     transform: rotate(180deg);
 }
 
-/* Ensure sidebar background syncs with theme */
 .sidebar {
     background-color: v-bind("theme.global.name.value === 'dark' ? '#333' : '#fff'");
 }
@@ -209,7 +249,6 @@ onMounted(() => {
         width: 200px;
     }
 }
-
 
 .v-data-table {
     transition: background-color 0.3s ease;
