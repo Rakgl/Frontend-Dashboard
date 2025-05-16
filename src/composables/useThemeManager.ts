@@ -51,7 +51,7 @@ export function useThemeManager() {
 
     const checkBatteryStatus = () => {
         if ('getBattery' in navigator) {
-            (navigator as any).getBattery().then((battery: BatteryManager) => {
+            (navigator as any).getBattery().then((battery: any) => {
                 isOnBattery.value = !battery.charging;
                 if (isOnBattery.value && battery.level <= 0.2) {
                     // Optimize for low battery (e.g., switch to light theme if dark)
