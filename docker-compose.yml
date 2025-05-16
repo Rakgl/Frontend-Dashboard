@@ -1,0 +1,15 @@
+version: '3'
+services:
+  frontend:
+    image: dashboard-frontend-tfuv4q
+    networks:
+      - dokploy-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`https://dashboard.s.aditidemo.asia`)
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls.certresolver=letsencrypt
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+networks:
+  dokploy-network:
+    external: true
