@@ -3,3 +3,29 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.text-h4 {
+  color: none;
+  font-weight: 600;
+}
+
+.v-text-field,
+.v-select {
+    :deep(.v-field) {
+        border-radius: 6px;
+        transition: box-shadow 0.2s ease;
+
+        &:focus-within {
+            box-shadow: 0 0 8px rgba(63, 81, 181, 0.3);
+        }
+    }
+
+    :deep(.v-label) {
+        font-weight: 500;
+    }
+}
+
+:deep(.v-card) {
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

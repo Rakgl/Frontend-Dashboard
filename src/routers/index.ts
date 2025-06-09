@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import adminRouter from './adminRouter';
-import Home from '../veiws/Home.vue';
 
 const routes = [
     ...adminRouter.options.routes,
@@ -9,10 +8,10 @@ const routes = [
         redirect: () => {
             try {
                 const token = localStorage.getItem('token');
-                return token ? '/admin/dashboard' : '/admin/login';
+                return token ? '/dashboard' : '/login';
             } catch (error) {
                 console.error('Error accessing localStorage:', error);
-                return '/admin/login';
+                return '/login';
             }
         },
     },
@@ -21,36 +20,31 @@ const routes = [
         redirect: () => {
             try {
                 const token = localStorage.getItem('token');
-                return token ? '/admin/dashboard' : '/admin/login';
+                return token ? '/dashboard' : '/login';
             } catch (error) {
                 console.error('Error accessing localStorage:', error);
-                return '/admin/login';
+                return '/login';
             }
         },
-    },
-    {
-        path: '/',
-        name: 'Home',
-        component: Home,
     },
 ]
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [...routes, ...adminRouter.options.routes]
+    routes
 });
 
 router.beforeEach((to, _from, next) => {
     try {
         const token = localStorage.getItem('token');
         if (to.meta.requiresAuth && !token) {
-            next('/admin/login');
+            next('/login');
         } else {
             next();
         }
     } catch (error) {
         console.error('Error accessing localStorage:', error);
-        next('/admin/login');
+        next('/login');
     }
 });
 
